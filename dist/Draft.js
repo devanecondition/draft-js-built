@@ -8882,7 +8882,7 @@ var Draft =
 	    editor._pendingStateFromBeforeInput = undefined;
 	  }
 
-	  var domSelection = ReactDOM.findDOMNode(this.refs.editor).ownerDocument.defaultView.getSelection();
+	  var domSelection = ReactDOM.findDOMNode(editor.refs.editor).ownerDocument.defaultView.getSelection();
 
 	  var anchorNode = domSelection.anchorNode,
 	      isCollapsed = domSelection.isCollapsed;
