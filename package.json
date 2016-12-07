@@ -30,13 +30,13 @@
     "test-ci": "NODE_ENV=test npm run lint && npm run flow && npm run test"
   },
   "dependencies": {
-    "fbjs": "Brandcast/fbjs-built#5b7738c",
+    "fbjs": "brandcast/fbjs-built#5b7738c",
     "immutable": "~3.7.4",
     "object-assign": "^4.1.0"
   },
   "peerDependencies": {
-    "react": "Brandcast/react-built#ab31c46",
-    "react-dom": "Brandcast/react-dom-built#6cd1db3"
+    "react": "brandcast/react-built#ef2d002",
+    "react-dom": "brandcast/react-dom-built#f87b264"
   },
   "devDependencies": {
     "babel-core": "^6.8.0",
