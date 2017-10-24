@@ -13,13 +13,14 @@
 
 'use strict';
 
+import type ContentState from './ContentState';
+import type SelectionState from './SelectionState';
+
 var Immutable = require('immutable');
 
 var generateRandomKey = require('./generateRandomKey');
 var invariant = require('fbjs/lib/invariant');
-
-import type ContentState from './ContentState';
-import type SelectionState from './SelectionState';
+var nullthrows = require('fbjs/lib/nullthrows');
 
 const { Map } = Immutable;
 
@@ -29,7 +30,7 @@ function splitBlockInContentState(contentState: ContentState, selectionState: Se
   var key = selectionState.getAnchorKey();
   var offset = selectionState.getAnchorOffset();
   var blockMap = contentState.getBlockMap();
-  var blockToSplit = blockMap.get(key);
+  var blockToSplit = nullthrows(blockMap.get(key));
 
   var text = blockToSplit.getText();
   var chars = blockToSplit.getCharacterList();

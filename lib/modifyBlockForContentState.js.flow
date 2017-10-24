@@ -13,11 +13,13 @@
 
 'use strict';
 
-const Immutable = require('immutable');
-
 import type ContentBlock from './ContentBlock';
 import type ContentState from './ContentState';
 import type SelectionState from './SelectionState';
+
+const Immutable = require('immutable');
+
+const nullthrows = require('fbjs/lib/nullthrows');
 
 const { Map } = Immutable;
 
@@ -25,7 +27,7 @@ function modifyBlockForContentState(contentState: ContentState, selectionState: 
   var startKey = selectionState.getStartKey();
   var endKey = selectionState.getEndKey();
   var blockMap = contentState.getBlockMap();
-  var newBlocks = blockMap.toSeq().skipUntil((_, k) => k === startKey).takeUntil((_, k) => k === endKey).concat(Map([[endKey, blockMap.get(endKey)]])).map(operation);
+  var newBlocks = blockMap.toSeq().skipUntil((_, k) => k === startKey).takeUntil((_, k) => k === endKey).concat(Map([[endKey, nullthrows(blockMap.get(endKey))]])).map(operation);
 
   return contentState.merge({
     blockMap: blockMap.merge(newBlocks),

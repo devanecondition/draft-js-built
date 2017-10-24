@@ -13,11 +13,11 @@
 
 'use strict';
 
-var DraftStringKey = require('./DraftStringKey');
-var UnicodeUtils = require('fbjs/lib/UnicodeUtils');
-
 import type ContentBlock from './ContentBlock';
 import type { EntityRange } from './EntityRange';
+
+var DraftStringKey = require('./DraftStringKey');
+var UnicodeUtils = require('fbjs/lib/UnicodeUtils');
 
 var { strlen } = UnicodeUtils;
 
@@ -26,7 +26,7 @@ var { strlen } = UnicodeUtils;
  */
 function encodeEntityRanges(block: ContentBlock, storageMap: Object): Array<EntityRange> {
   var encoded = [];
-  block.findEntityRanges(character => !!character.getEntity(), ( /*number*/start, /*number*/end) => {
+  block.findEntityRanges(character => !!(character && character.getEntity()), ( /*number*/start, /*number*/end) => {
     var text = block.getText();
     var key = block.getEntityAt(start);
     encoded.push({

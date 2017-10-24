@@ -14,8 +14,10 @@
 'use strict';
 
 import type ContentState from './ContentState';
-import type SelectionState from './SelectionState';
 import type { EntityMap } from './EntityMap';
+import type SelectionState from './SelectionState';
+
+const nullthrows = require('fbjs/lib/nullthrows');
 
 /**
  * Return the entity key that should be used when inserting text for the
@@ -29,7 +31,7 @@ function getEntityKeyForSelection(contentState: ContentState, targetSelection: S
     var key = targetSelection.getAnchorKey();
     var offset = targetSelection.getAnchorOffset();
     if (offset > 0) {
-      entityKey = contentState.getBlockForKey(key).getEntityAt(offset - 1);
+      entityKey = nullthrows(contentState.getBlockForKey(key)).getEntityAt(offset - 1);
       return filterKey(contentState.getEntityMap(), entityKey);
     }
     return null;
@@ -37,7 +39,7 @@ function getEntityKeyForSelection(contentState: ContentState, targetSelection: S
 
   var startKey = targetSelection.getStartKey();
   var startOffset = targetSelection.getStartOffset();
-  var startBlock = contentState.getBlockForKey(startKey);
+  var startBlock = nullthrows(contentState.getBlockForKey(startKey));
 
   entityKey = startOffset === startBlock.getLength() ? null : startBlock.getEntityAt(startOffset);
 

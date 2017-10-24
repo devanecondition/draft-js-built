@@ -21,7 +21,10 @@ import type { OrderedMap } from 'immutable';
 let key = 0;
 
 function addEntityToEntityMap(entityMap: OrderedMap<*, *>, instance: DraftEntityInstance): OrderedMap<*, *> {
-  return entityMap.set(`${ ++key }`, instance);
+  /* $FlowFixMe(>=0.53.0 site=www,mobile) -
+   * should be fixed by * https://github.com/facebook/immutable-js/pull/1112
+   */
+  return entityMap.set(`${++key}`, instance);
 }
 
 module.exports = addEntityToEntityMap;

@@ -13,14 +13,14 @@
 
 'use strict';
 
+import type { DOMDerivedSelection } from './DOMDerivedSelection';
+import type EditorState from './EditorState';
+
 var findAncestorOffsetKey = require('./findAncestorOffsetKey');
 var getSelectionOffsetKeyForNode = require('./getSelectionOffsetKeyForNode');
 var getUpdatedSelectionState = require('./getUpdatedSelectionState');
 var invariant = require('fbjs/lib/invariant');
 var nullthrows = require('fbjs/lib/nullthrows');
-
-import type { DOMDerivedSelection } from './DOMDerivedSelection';
-import type EditorState from './EditorState';
 
 type SelectionPoint = {
   key: string;
@@ -128,8 +128,7 @@ function getPointForNonTextNode(editorRoot: ?HTMLElement, startNode: Node, child
   // wrapper.
   if (editorRoot === node) {
     node = node.firstChild;
-    var win = node && node.ownerDocument.defaultView;
-    invariant(win && node instanceof win.Element && node.getAttribute('data-contents') === 'true', 'Invalid DraftEditorContents structure.');
+    invariant(node && node.nodeType === 1 && typeof node.getAttribute === 'function' && node.getAttribute('data-contents') === 'true', 'Invalid DraftEditorContents structure.');
     if (childOffset > 0) {
       childOffset = node.childNodes.length;
     }

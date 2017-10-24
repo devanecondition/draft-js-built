@@ -13,15 +13,16 @@
 
 'use strict';
 
+import type { BlockMap } from './BlockMap';
+import type ContentState from './ContentState';
+import type SelectionState from './SelectionState';
+
 var BlockMapBuilder = require('./BlockMapBuilder');
 
 var generateRandomKey = require('./generateRandomKey');
 var insertIntoList = require('./insertIntoList');
 var invariant = require('fbjs/lib/invariant');
-
-import type { BlockMap } from './BlockMap';
-import type ContentState from './ContentState';
-import type SelectionState from './SelectionState';
+var nullthrows = require('fbjs/lib/nullthrows');
 
 function insertFragmentIntoContentState(contentState: ContentState, selectionState: SelectionState, fragment: BlockMap): ContentState {
   invariant(selectionState.isCollapsed(), '`insertFragment` should only be called with a collapsed selection state.');
@@ -36,8 +37,8 @@ function insertFragmentIntoContentState(contentState: ContentState, selectionSta
   var finalOffset;
 
   if (fragmentSize === 1) {
-    var targetBlock = blockMap.get(targetKey);
-    var pastedBlock = fragment.first();
+    var targetBlock = nullthrows(blockMap.get(targetKey));
+    var pastedBlock = nullthrows(fragment.first());
     var text = targetBlock.getText();
     var chars = targetBlock.getCharacterList();
 
@@ -46,8 +47,6 @@ function insertFragmentIntoContentState(contentState: ContentState, selectionSta
       characterList: insertIntoList(chars, pastedBlock.getCharacterList(), targetOffset),
       data: pastedBlock.getData()
     });
-
-    blockMap = blockMap.set(targetKey, newBlock);
 
     finalKey = targetKey;
     finalOffset = targetOffset + pastedBlock.getText().length;
@@ -80,7 +79,7 @@ function insertFragmentIntoContentState(contentState: ContentState, selectionSta
     var blockSize = text.length;
     var headText = text.slice(0, targetOffset);
     var headCharacters = chars.slice(0, targetOffset);
-    var appendToHead = fragment.first();
+    var appendToHead = nullthrows(fragment.first());
 
     var modifiedHead = block.merge({
       text: headText + appendToHead.getText(),
@@ -99,7 +98,7 @@ function insertFragmentIntoContentState(contentState: ContentState, selectionSta
     // Modify tail portion of block.
     var tailText = text.slice(targetOffset, blockSize);
     var tailCharacters = chars.slice(targetOffset, blockSize);
-    var prependToTail = fragment.last();
+    var prependToTail = nullthrows(fragment.last());
     finalKey = generateRandomKey();
 
     var modifiedTail = prependToTail.merge({
@@ -112,7 +111,7 @@ function insertFragmentIntoContentState(contentState: ContentState, selectionSta
     newBlockArr.push(modifiedTail);
   });
 
-  finalOffset = fragment.last().getLength();
+  finalOffset = nullthrows(fragment.last()).getLength();
 
   return contentState.merge({
     blockMap: BlockMapBuilder.createFromArray(newBlockArr),

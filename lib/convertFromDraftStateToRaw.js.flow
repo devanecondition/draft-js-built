@@ -12,13 +12,13 @@
 
 'use strict';
 
+import type ContentState from './ContentState';
+import type { RawDraftContentState } from './RawDraftContentState';
+
 var DraftStringKey = require('./DraftStringKey');
 
 var encodeEntityRanges = require('./encodeEntityRanges');
 var encodeInlineStyleRanges = require('./encodeInlineStyleRanges');
-
-import type ContentState from './ContentState';
-import type { RawDraftContentState } from './RawDraftContentState';
 
 function convertFromDraftStateToRaw(contentState: ContentState): RawDraftContentState {
   var entityStorageKey = 0;
@@ -26,7 +26,7 @@ function convertFromDraftStateToRaw(contentState: ContentState): RawDraftContent
   var rawBlocks = [];
 
   contentState.getBlockMap().forEach((block, blockKey) => {
-    block.findEntityRanges(character => character.getEntity() !== null, start => {
+    block.findEntityRanges(character => !!(character && character.getEntity() !== null), start => {
       // Stringify to maintain order of otherwise numeric keys.
       var stringifiedEntityKey = DraftStringKey.stringify(block.getEntityAt(start));
       if (!entityStorageMap.hasOwnProperty(stringifiedEntityKey)) {

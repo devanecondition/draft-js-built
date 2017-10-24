@@ -16,11 +16,13 @@
 import type ContentState from './ContentState';
 import type SelectionState from './SelectionState';
 
+const nullthrows = require('fbjs/lib/nullthrows');
+
 function adjustBlockDepthForContentState(contentState: ContentState, selectionState: SelectionState, adjustment: number, maxDepth: number): ContentState {
   var startKey = selectionState.getStartKey();
   var endKey = selectionState.getEndKey();
   var blockMap = contentState.getBlockMap();
-  var blocks = blockMap.toSeq().skipUntil((_, k) => k === startKey).takeUntil((_, k) => k === endKey).concat([[endKey, blockMap.get(endKey)]]).map(block => {
+  var blocks = blockMap.toSeq().skipUntil((_, k) => k === startKey).takeUntil((_, k) => k === endKey).concat([[endKey, nullthrows(blockMap.get(endKey))]]).map(block => {
     var depth = block.getDepth() + adjustment;
     depth = Math.max(0, Math.min(depth, maxDepth));
     return block.set('depth', depth);

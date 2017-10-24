@@ -14,6 +14,8 @@
 
 var EditorState = require('./EditorState');
 
+var nullthrows = require('fbjs/lib/nullthrows');
+
 /**
  * See comment for `moveSelectionToStartOfBlock`.
  */
@@ -21,7 +23,7 @@ function keyCommandMoveSelectionToEndOfBlock(editorState: EditorState): EditorSt
   var selection = editorState.getSelection();
   var endKey = selection.getEndKey();
   var content = editorState.getCurrentContent();
-  var textLength = content.getBlockForKey(endKey).getLength();
+  var textLength = nullthrows(content.getBlockForKey(endKey)).getLength();
   return EditorState.set(editorState, {
     selection: selection.merge({
       anchorKey: endKey,

@@ -13,12 +13,13 @@
 
 'use strict';
 
+import type ContentState from './ContentState';
+import type SelectionState from './SelectionState';
+
 var Immutable = require('immutable');
 
 var applyEntityToContentBlock = require('./applyEntityToContentBlock');
-
-import type ContentState from './ContentState';
-import type SelectionState from './SelectionState';
+var nullthrows = require('fbjs/lib/nullthrows');
 
 function applyEntityToContentState(contentState: ContentState, selectionState: SelectionState, entityKey: ?string): ContentState {
   const blockMap = contentState.getBlockMap();
@@ -27,7 +28,7 @@ function applyEntityToContentState(contentState: ContentState, selectionState: S
   const endKey = selectionState.getEndKey();
   const endOffset = selectionState.getEndOffset();
 
-  const newBlocks = blockMap.skipUntil((_, k) => k === startKey).takeUntil((_, k) => k === endKey).toOrderedMap().merge(Immutable.OrderedMap([[endKey, blockMap.get(endKey)]])).map((block, blockKey) => {
+  const newBlocks = blockMap.skipUntil((_, k) => k === startKey).takeUntil((_, k) => k === endKey).toOrderedMap().merge(Immutable.OrderedMap([[endKey, nullthrows(blockMap.get(endKey))]])).map((block, blockKey) => {
     const sliceStart = blockKey === startKey ? startOffset : 0;
     const sliceEnd = blockKey === endKey ? endOffset : block.getLength();
     return applyEntityToContentBlock(block, sliceStart, sliceEnd, entityKey);
